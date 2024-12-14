@@ -43,11 +43,13 @@ public class QuoteTests
     public void AddPrice_QuotePriceUp_Success()
     {
         var quote = new Quote(new(DefaultTicker), new(DefaultUp, DefaultDown));
-        var price = new QuotePrice();
+        var quotePrice = new QuotePrice(new(DefaultUp + 0.33M, DateTime.Now));
 
-        quote.AddPrice(price);
+        quote.AddPrice(quotePrice);
 
-        Assert.Equal(price, quote.Prices.First());
+        Assert.Equal(quotePrice.Price.Value, quote.Prices.First().Price.Value);
+        Assert.Equal(quotePrice.Price.Date, quote.Prices.First().Price.Date);
+        Assert.Single(quote.DomainEvents);
     }
 
     [Fact]
@@ -56,6 +58,6 @@ public class QuoteTests
         var quote = new Quote(new(DefaultTicker), new(DefaultUp, DefaultDown));
 
         var exception = Assert.Throws<ArgumentNullException>(() => quote.AddPrice(null!));
-        Assert.Equal("O preço precisa ser informado. (Parameter 'price')", exception.Message);
+        Assert.Equal("O preço precisa ser informado. (Parameter 'quotePrice')", exception.Message);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using StockQuote.Core.BaseClasses;
 using StockQuote.Core.Interfaces;
+using StockQuote.Core.QuoteAggregate.Events;
 
 namespace StockQuote.Core.QuoteAggregate;
 
@@ -20,10 +21,11 @@ public class Quote : EntityBase, IAggregateRoot
         LimitAlert = Guard.Against.Null(limit, message: "É necessário informar o limite de alerta para a cotação.");
     }
 
-    public void AddPrice(QuotePrice price)
+    public void AddPrice(QuotePrice quotePrice)
     {
-        Guard.Against.Null(price, message: "O preço precisa ser informado.");
-        _prices.Add(price);
+        Guard.Against.Null(quotePrice, message: "O preço precisa ser informado.");
+        _prices.Add(quotePrice);
+        AddDomainEvent(new PriceAddedEvent(Asset.Ticker, LimitAlert, quotePrice.Price));
     }
 }
 
