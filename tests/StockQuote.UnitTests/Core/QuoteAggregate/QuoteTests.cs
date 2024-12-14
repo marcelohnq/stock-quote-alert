@@ -49,6 +49,7 @@ public class QuoteTests
 
         Assert.Equal(quotePrice.Price.Value, quote.Prices.First().Price.Value);
         Assert.Equal(quotePrice.Price.Date, quote.Prices.First().Price.Date);
+        Assert.Single(quote.DomainEvents);
     }
 
     [Fact]
@@ -57,6 +58,6 @@ public class QuoteTests
         var quote = new Quote(new(DefaultTicker), new(DefaultUp, DefaultDown));
 
         var exception = Assert.Throws<ArgumentNullException>(() => quote.AddPrice(null!));
-        Assert.Equal("O preço precisa ser informado. (Parameter 'price')", exception.Message);
+        Assert.Equal("O preço precisa ser informado. (Parameter 'quotePrice')", exception.Message);
     }
 }
