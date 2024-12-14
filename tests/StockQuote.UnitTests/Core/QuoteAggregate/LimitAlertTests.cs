@@ -1,4 +1,6 @@
-﻿namespace StockQuote.UnitTests.Core.QuoteAggregate;
+﻿using StockQuote.Core.QuoteAggregate;
+
+namespace StockQuote.UnitTests.Core.QuoteAggregate;
 
 public class LimitAlertTests
 {

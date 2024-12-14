@@ -1,4 +1,6 @@
-﻿namespace StockQuote.UnitTests.Core.QuoteAggregate;
+﻿using StockQuote.Core.BaseClasses;
+
+namespace StockQuote.UnitTests.Core.BaseClasses;
 
 public class AuditTests
 {

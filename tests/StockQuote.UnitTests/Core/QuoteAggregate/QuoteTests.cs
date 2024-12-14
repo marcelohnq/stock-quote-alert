@@ -1,4 +1,6 @@
-﻿namespace StockQuote.UnitTests.Core.QuoteAggregate;
+﻿using StockQuote.Core.QuoteAggregate;
+
+namespace StockQuote.UnitTests.Core.QuoteAggregate;
 
 public class QuoteTests
 {
@@ -19,8 +21,7 @@ public class QuoteTests
             () => Assert.Equal(ticker, quote.Asset.Ticker),
             () => Assert.Equal(quoteUp, quote.LimitAlert.Up),
             () => Assert.Equal(quoteDown, quote.LimitAlert.Down),
-            () => Assert.Equal(DateTime.Now.ToShortDateString(), quote.Audit.CreatedAt.ToShortDateString()),
-            () => Assert.Equal(DateTime.Now.ToShortDateString(), quote.Audit.UpdatedAt.ToShortDateString()),
+            () => Assert.NotNull(quote.Audit),
             () => Assert.Empty(quote.Prices));
     }
 
@@ -35,17 +36,26 @@ public class QuoteTests
     public void Constructor_QuoteLimitNull_ThrowsArgumentNullException()
     {
         var exception = Assert.Throws<ArgumentNullException>(() => new Quote(new(DefaultTicker), null!));
-        Assert.Equal("É necessário informar o limite de alerta para a cotação. (Parameter 'asset')", exception.Message);
+        Assert.Equal("É necessário informar o limite de alerta para a cotação. (Parameter 'limit')", exception.Message);
     }
 
     [Fact]
     public void AddPrice_QuotePriceUp_Success()
     {
         var quote = new Quote(new(DefaultTicker), new(DefaultUp, DefaultDown));
-        var price = new Price(DefaultUp + 1, DateTime.Now);
+        var price = new QuotePrice();
 
         quote.AddPrice(price);
 
         Assert.Equal(price, quote.Prices.First());
+    }
+
+    [Fact]
+    public void AddPrice_QuotePriceNull_ThrowsArgumentNullException()
+    {
+        var quote = new Quote(new(DefaultTicker), new(DefaultUp, DefaultDown));
+
+        var exception = Assert.Throws<ArgumentNullException>(() => quote.AddPrice(null!));
+        Assert.Equal("O preço precisa ser informado. (Parameter 'price')", exception.Message);
     }
 }
