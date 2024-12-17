@@ -15,6 +15,9 @@ public class Quote : EntityBase, IAggregateRoot
 
     public IReadOnlyCollection<QuotePrice> Prices => _prices.AsReadOnly();
 
+#pragma warning disable CS8618 // Used by EF
+    private Quote() { }
+
     public Quote(Asset asset, LimitAlert limit)
     {
         Asset = Guard.Against.Null(asset, message: "É necessário informar um ativo.");
