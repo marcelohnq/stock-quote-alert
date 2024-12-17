@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StockQuote.Core.BaseClasses;
 using StockQuote.Core.Interfaces;
+using System.Linq.Expressions;
 
 namespace StockQuote.Infrastructure.Data;
 
@@ -13,6 +14,9 @@ public class EfRepository<T>(QuoteContext _dbContext) : IRepository<T> where T :
 
     public async Task<IEnumerable<T>> ListAsync(CancellationToken cancellationToken = default) =>
         await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
+
+    public async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) =>
+        await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate, cancellationToken);
 
     public async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
     {
