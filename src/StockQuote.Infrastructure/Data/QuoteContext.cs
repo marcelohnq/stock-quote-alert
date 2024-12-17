@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace StockQuote.Infrastructure.Data;
 
-public class QuoteContext(IMediator _mediator, DbContextOptions<QuoteContext> options) : DbContext(options)
+public class QuoteContext(DbContextOptions<QuoteContext> options, IMediator _mediator) : DbContext(options)
 {
     public DbSet<Quote> Quotes => Set<Quote>();
 

@@ -12,7 +12,11 @@ public class QuoteConfiguration : IEntityTypeConfiguration<Quote>
         navigation?.SetPropertyAccessMode(PropertyAccessMode.Field);
 
         builder.OwnsOne(q => q.Asset);
-        builder.OwnsOne(q => q.LimitAlert);
+        builder.OwnsOne(q => q.LimitAlert, l =>
+        {
+            l.Property(la => la.Up).HasPrecision(18, 4);
+            l.Property(la => la.Down).HasPrecision(18, 4);
+        });
         builder.OwnsOne(q => q.Audit);
     }
 }
