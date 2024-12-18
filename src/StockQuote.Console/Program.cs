@@ -20,9 +20,9 @@ var logger = builder.Logging.Services.BuildServiceProvider()
 
 logger.LogInformation("Start - StockQuote sendo iniciado!");
 
+builder.Services.AddServicesConfigs(builder);
 builder.Services.AddMediatrConfigs();
 builder.Services.AddInfrastructureServices(builder.Configuration, logger);
-builder.Services.AddScoped<CommandRequest>();
 
 using IHost host = builder.Build();
 
