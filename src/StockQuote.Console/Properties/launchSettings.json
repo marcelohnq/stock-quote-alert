@@ -2,6 +2,7 @@
   "profiles": {
     "StockQuote.Console": {
       "commandName": "Project",
+      "commandLineArgs": "-l",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
       }

@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StockQuote.Infrastructure\StockQuote.Infrastructure.csproj" />
+    <ProjectReference Include="..\StockQuote.UseCases\StockQuote.UseCases.csproj" />
   </ItemGroup>
 
   <ItemGroup>
