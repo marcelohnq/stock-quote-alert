@@ -2,7 +2,7 @@
 
 namespace StockQuote.Infrastructure.API;
 
-public class FakeQuoteService : IAPIQuote
+public class FakeQuoteService : IApiQuote
 {
     private readonly Random random = new();
 

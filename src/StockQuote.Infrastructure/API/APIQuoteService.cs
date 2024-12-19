@@ -2,7 +2,7 @@
 
 namespace StockQuote.Infrastructure.API;
 
-public class APIQuoteService : IAPIQuote
+public class ApiQuoteService : IApiQuote
 {
     public Task<decimal> GetCurrentQuote(string ticker)
     {

@@ -6,11 +6,9 @@ namespace StockQuote.Console.Command;
 
 public class CommandRequest(IMediator _mediator, ILogger<CommandRequest> _logger)
 {
-    private readonly string[] commandLineArgs = Environment.GetCommandLineArgs();
-
-    public async Task ExecuteCommand()
+    public async Task ExecuteCommand(string[] args)
     {
-        switch (commandLineArgs[1])
+        switch (args[0])
         {
             case "-l":
                 await _mediator.Send(new ListQuotesQuery());

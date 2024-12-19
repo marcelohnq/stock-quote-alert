@@ -1,6 +1,6 @@
 ﻿namespace StockQuote.Core.Interfaces;
 
-public interface IAPIQuote
+public interface IApiQuote
 {
     Task<decimal> GetCurrentQuote(string ticker);
 }
