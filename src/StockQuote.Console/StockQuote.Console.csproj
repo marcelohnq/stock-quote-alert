@@ -12,10 +12,12 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\StockQuote.Infrastructure\StockQuote.Infrastructure.csproj" />
+    <ProjectReference Include="..\StockQuote.UseCases\StockQuote.UseCases.csproj" />
   </ItemGroup>
 
   <ItemGroup>

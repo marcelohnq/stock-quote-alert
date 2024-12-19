@@ -5,7 +5,7 @@ using StockQuote.Core.QuoteAggregate;
 using StockQuote.Infrastructure.Data;
 using Testcontainers.MsSql;
 
-namespace StockQuote.IntegrationTests.Data;
+namespace StockQuote.IntegrationTests;
 
 public class IntegrationTestBase : IAsyncLifetime
 {

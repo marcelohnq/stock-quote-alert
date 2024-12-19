@@ -39,11 +39,15 @@ public class QuoteTests
         Assert.Equal("É necessário informar o limite de alerta para a cotação. (Parameter 'limit')", exception.Message);
     }
 
-    [Fact]
-    public void AddPrice_QuotePriceUp_Success()
+    [Theory]
+    [InlineData(38.33, 38.22, 38.21)]
+    [InlineData(38.33, 38.22, 38.34)]
+    [InlineData(38.33, 38.22, 38.15)]
+    [InlineData(38.33, 38.22, 38.41)]
+    public void AddPrice_QuotePrice_Success(decimal up, decimal down, decimal current)
     {
-        var quote = new Quote(new(DefaultTicker), new(DefaultUp, DefaultDown));
-        var quotePrice = new QuotePrice(new(DefaultUp + 0.33M, DateTime.Now));
+        var quote = new Quote(new(DefaultTicker), new(up, down));
+        var quotePrice = new QuotePrice(new(current, DateTime.Now));
 
         quote.AddPrice(quotePrice);
 
@@ -59,5 +63,18 @@ public class QuoteTests
 
         var exception = Assert.Throws<ArgumentNullException>(() => quote.AddPrice(null!));
         Assert.Equal("O preço precisa ser informado. (Parameter 'quotePrice')", exception.Message);
+    }
+
+    [Theory]
+    [InlineData(38.33, 38.22, 38.22)]
+    [InlineData(38.33, 38.22, 38.33)]
+    [InlineData(38.33, 38.22, 38.28)]
+    public void AddPrice_QuotePriceInvalid_ThrowsArgumentException(decimal up, decimal down, decimal current)
+    {
+        var quote = new Quote(new(DefaultTicker), new(up, down));
+        var price = new Price(current, DateTime.Now);
+
+        var exception = Assert.Throws<ArgumentException>(() => quote.AddPrice(new(price)));
+        Assert.Equal("O preço precisa ser maior ou menor que os limites definidos. (Parameter 'quotePrice')", exception.Message);
     }
 }
