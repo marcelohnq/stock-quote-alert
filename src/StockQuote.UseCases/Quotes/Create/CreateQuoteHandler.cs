@@ -12,7 +12,7 @@ public class CreateQuoteHandler(IRepository<Quote> _repository, ILogger<CreateQu
     {
         var tickerExists = await _repository.FirstOrDefaultAsync(q => q.Asset.Ticker == request.Ticker, cancellationToken);
 
-        if (tickerExists is null)
+        if (tickerExists is not null)
         {
             _logger.LogTrace("Já existe um registro para o ativo [{Ativo}]", request.Ticker);
             return null;

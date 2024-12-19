@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -7,28 +8,32 @@ using Testcontainers.MsSql;
 
 namespace StockQuote.FunctionalTests;
 
-public class ApplicationFixture : IDisposable
+public class ApplicationFixture : IAsyncLifetime
 {
     private readonly MsSqlContainer _databaseContainer = new MsSqlBuilder()
         .WithCleanUp(true)
         .WithName($"Quote-{Guid.NewGuid()}")
         .Build();
 
-    public IHost Host { get; private set; }
+    public required IHost Host { get; set; }
+    public required IServiceScope Scope { get; set; }
+    public required QuoteContext DbContext { get; set; }
+    public required IMediator Mediator { get; set; }
 
-    public ApplicationFixture()
+    public async Task InitializeAsync()
     {
+        await _databaseContainer.StartAsync();
+        Environment.SetEnvironmentVariable("DOTNET_ENVIRONMENT", "Development");
+
         var builder = Program.CreateApplicationBuilder([], out ILogger _);
         ConfigureHost(builder.Services);
-        builder.Environment.EnvironmentName = "Development";
         Host = builder.Build();
 
-        using var scope = Host.Services.CreateScope();
-        var scopedServices = scope.ServiceProvider;
-        var db = scopedServices.GetRequiredService<QuoteContext>();
+        Scope = Host.Services.CreateScope();
+        Mediator = Scope.ServiceProvider.GetRequiredService<IMediator>();
+        DbContext = Scope.ServiceProvider.GetRequiredService<QuoteContext>();
 
-        // Ensure the database is created.
-        db.Database.Migrate();
+        await DbContext.Database.MigrateAsync();
     }
 
     private void ConfigureHost(IServiceCollection services)
@@ -47,17 +52,11 @@ public class ApplicationFixture : IDisposable
             options.UseSqlServer(_databaseContainer.GetConnectionString()));
     }
 
-    public void Dispose()
+    public async Task DisposeAsync()
     {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            Host.Dispose();
-        }
+        Host.Dispose();
+        Scope.Dispose();
+        await DbContext.DisposeAsync();
+        await _databaseContainer.DisposeAsync();
     }
 }
