@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using StockQuote.Core.Interfaces;
@@ -11,7 +12,7 @@ using System.Text.RegularExpressions;
 
 namespace StockQuote.Console.Service;
 
-public partial class QuoteService(IMediator _mediator,
+public partial class QuoteService(IServiceScopeFactory _serviceScopeFactory,
     IApiQuote _apiQuote,
     IConfiguration _config,
     ILogger<QuoteService> _logger) : BackgroundService
@@ -35,8 +36,8 @@ public partial class QuoteService(IMediator _mediator,
             _logger.LogInformation("Não foi possível capturar a cotação do ativo {Ticker}.", ticker);
             return;
         }
-        
-        var quote = await CreateAsset(ticker, up, down);
+
+        var quote = await CreateAssetQuote(ticker, up, down);
 
         if (quote is null)
         {
@@ -44,11 +45,12 @@ public partial class QuoteService(IMediator _mediator,
             return;
         }
 
-        await AlertQuotePrice(quote.Id, currentPrice.Value);
-
         while (!stoppingToken.IsCancellationRequested)
         {
-            await Task.Delay(1000, stoppingToken);
+            currentPrice = await _apiQuote.GetCurrentQuote(ticker);
+            await AlertQuotePrice(quote.Id, currentPrice.Value);
+
+            await Task.Delay(60000, stoppingToken);
         }
 
         _logger.LogInformation("Serviço de Cotação - Finalizado.");
@@ -73,13 +75,20 @@ public partial class QuoteService(IMediator _mediator,
         return true;
     }
 
-    private async Task<QuoteDto?> CreateAsset(string ticker, decimal up, decimal down) =>
-        await _mediator.Send(new CreateQuoteCommand(ticker, up, down));
+    private async Task<QuoteDto?> CreateAssetQuote(string ticker, decimal up, decimal down)
+    {
+        using var scope = _serviceScopeFactory.CreateScope();
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        return await mediator.Send(new CreateQuoteCommand(ticker, up, down));
+    }
 
     private async Task<bool> AlertQuotePrice(int idQuote, decimal price)
     {
         price = TruncateN2(price);
-        return await _mediator.Send(new AlertQuoteCommand(idQuote, price, DateTime.Now));
+
+        using var scope = _serviceScopeFactory.CreateScope();
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        return await mediator.Send(new AlertQuoteCommand(idQuote, price, DateTime.Now));
     }
 
     private static decimal TruncateN2(decimal value) =>

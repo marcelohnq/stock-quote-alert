@@ -15,6 +15,11 @@ public static class ServicesConfigs
         if (builder.Environment.IsDevelopment())
         {
             services.AddScoped<IEmailSender, FakeEmailSender>();
+            services.AddHttpClient<IApiQuote, FakeQuoteService>();
+        }
+        else
+        {
+            services.AddScoped<IEmailSender, FakeEmailSender>();
             services.AddHttpClient<IApiQuote, ApiQuoteService>();
         }
 
