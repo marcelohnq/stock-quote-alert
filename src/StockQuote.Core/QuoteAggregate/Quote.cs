@@ -31,6 +31,9 @@ public class Quote : EntityBase, IAggregateRoot
         _prices.Add(quotePrice);
         AddDomainEvent(new PriceAddedEvent(Asset.Ticker, LimitAlert, quotePrice.Price));
     }
+
+    public void AlterLimitAlert(LimitAlert limit) =>
+        LimitAlert = Guard.Against.Null(limit, message: "É necessário informar o limite de alerta para alterá-lo.");
 }
 
 public class Asset

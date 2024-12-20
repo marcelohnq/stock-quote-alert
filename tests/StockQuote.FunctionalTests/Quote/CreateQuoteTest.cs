@@ -26,9 +26,12 @@ public class CreateQuoteTest(ApplicationFixture _app) : IClassFixture<Applicatio
     public async Task Command_CreateQuote_Duplicate()
     {
         var command = new CreateQuoteCommand("PETR4", 38.22M, 38.11M);
-        _ = await _app.Mediator.Send(command);
-        var result = await _app.Mediator.Send(command);
-        Assert.Null(result);
+        var quote = await _app.Mediator.Send(command);
+        var sameQuote = await _app.Mediator.Send(command);
+
+        Assert.NotNull(quote);
+        Assert.NotNull(sameQuote);
+        Assert.Equal(quote.Id, sameQuote.Id);
 
         var gets = await _app.DbContext.Quotes.ToListAsync();
 

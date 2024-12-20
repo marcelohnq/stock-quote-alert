@@ -2,11 +2,11 @@
 
 namespace StockQuote.Infrastructure.API;
 
-public class FakeQuoteService : IApiQuote
+public class FakeQuoteService(HttpClient _) : IApiQuote
 {
     private readonly Random random = new();
 
-    public async Task<decimal> GetCurrentQuote(string ticker)
+    public async Task<decimal?> GetCurrentQuote(string ticker)
     {
         await Task.Delay(300);
 

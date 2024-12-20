@@ -15,7 +15,11 @@ public class CreateQuoteHandler(IRepository<Quote> _repository, ILogger<CreateQu
         if (tickerExists is not null)
         {
             _logger.LogTrace("Já existe um registro para o ativo [{Ativo}]", request.Ticker);
-            return null;
+            tickerExists.AlterLimitAlert(new(request.LimitUp, request.LimitDown));
+
+            await _repository.UpdateAsync(tickerExists, cancellationToken);
+
+            return tickerExists.ParserDTO();
         }
 
         var quote = new Quote(new(request.Ticker), new(request.LimitUp, request.LimitDown));

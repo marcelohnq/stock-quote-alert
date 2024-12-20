@@ -2,7 +2,7 @@
   "profiles": {
     "StockQuote.Console": {
       "commandName": "Project",
-      "commandLineArgs": "-l",
+      "commandLineArgs": "PETR4 22.67555555 22.59555555",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
       }
