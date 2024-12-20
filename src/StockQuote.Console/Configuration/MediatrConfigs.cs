@@ -12,8 +12,7 @@ public static class MediatrConfigs
         var mediatRAssemblies = new[]
         {
             Assembly.GetAssembly(typeof(Quote)), // Core
-
-            Assembly.GetAssembly(typeof(ListQuotesQuery)), // Core
+            Assembly.GetAssembly(typeof(ListQuotesQuery)), // UseCases
         };
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(mediatRAssemblies!));
