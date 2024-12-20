@@ -27,6 +27,7 @@ public class Quote : EntityBase, IAggregateRoot
     public void AddPrice(QuotePrice quotePrice)
     {
         Guard.Against.Null(quotePrice, message: "O preço precisa ser informado.");
+        Guard.Against.InvalidInput(quotePrice, nameof(quotePrice), q => q.Price.Value > LimitAlert.Up || q.Price.Value < LimitAlert.Down, message: "O preço precisa ser maior ou menor que os limites definidos.");
         _prices.Add(quotePrice);
         AddDomainEvent(new PriceAddedEvent(Asset.Ticker, LimitAlert, quotePrice.Price));
     }

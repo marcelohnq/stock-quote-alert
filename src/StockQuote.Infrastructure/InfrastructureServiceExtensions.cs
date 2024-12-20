@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using StockQuote.Core.Interfaces;
 using StockQuote.Infrastructure.Data;
-using StockQuote.Infrastructure.Email;
 
 namespace StockQuote.Infrastructure;
 
@@ -24,8 +23,6 @@ public static class InfrastructureServiceExtensions
 
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>))
                .AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>));
-
-        services.AddScoped<IEmailSender, FakeEmailSender>();
 
         logger.LogInformation("Infrastructure - serviços registrados com sucesso");
 
