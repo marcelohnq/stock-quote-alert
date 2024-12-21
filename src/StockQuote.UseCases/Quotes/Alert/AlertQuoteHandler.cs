@@ -17,10 +17,17 @@ public class AlertQuoteHandler(IRepository<Quote> _repository, ILogger<AlertQuot
             return false;
         }
 
-        quote.AddPrice(new(new(request.Price, request.DatePrice)));
+        try
+        {
+            quote.AddPrice(new(new(request.Price, request.DatePrice)));
 
-        await _repository.UpdateAsync(quote, cancellationToken);
+            await _repository.UpdateAsync(quote, cancellationToken);
 
-        return true;
+            return true;
+        }
+        catch (ArgumentException)
+        {
+            return false;
+        }
     }
 }
