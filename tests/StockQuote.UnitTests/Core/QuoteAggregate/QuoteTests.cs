@@ -77,4 +77,17 @@ public class QuoteTests
         var exception = Assert.Throws<ArgumentException>(() => quote.AddPrice(new(price)));
         Assert.Equal("O preço precisa ser maior ou menor que os limites definidos. (Parameter 'quotePrice')", exception.Message);
     }
+
+    [Fact]
+    public void AlterLimitAlert_Quote_Success()
+    {
+        var alterUp = 99.99M;
+        var alterDown = 0.99M;
+        var quote = new Quote(new(DefaultTicker), new(DefaultUp, DefaultDown));
+
+        quote.AlterLimitAlert(new(alterUp, alterDown));
+
+        Assert.Equal(alterUp, quote.LimitAlert.Up);
+        Assert.Equal(alterDown, quote.LimitAlert.Down);
+    }
 }

@@ -16,7 +16,7 @@ public class EfRepository<T>(QuoteContext _dbContext) : IRepository<T> where T :
         await _dbSet.AsNoTracking().ToListAsync(cancellationToken);
 
     public async Task<T?> FirstOrDefaultAsync(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default) =>
-        await _dbSet.AsNoTracking().FirstOrDefaultAsync(predicate, cancellationToken);
+        await _dbSet.FirstOrDefaultAsync(predicate, cancellationToken);
 
     public async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
     {

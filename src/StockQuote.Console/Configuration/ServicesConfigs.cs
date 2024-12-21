@@ -17,6 +17,11 @@ public static class ServicesConfigs
             services.AddScoped<IEmailSender, FakeEmailSender>();
             services.AddHttpClient<IApiQuote, FakeQuoteService>();
         }
+        else
+        {
+            services.AddScoped<IEmailSender, FakeEmailSender>();
+            services.AddHttpClient<IApiQuote, ApiQuoteService>();
+        }
 
         services.AddScoped<CommandRequest>();
         services.AddHostedService<QuoteService>();

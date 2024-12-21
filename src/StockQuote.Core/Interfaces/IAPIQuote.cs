@@ -2,5 +2,5 @@
 
 public interface IApiQuote
 {
-    Task<decimal> GetCurrentQuote(string ticker);
+    Task<decimal?> GetCurrentQuote(string ticker);
 }
