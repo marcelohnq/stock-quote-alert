@@ -4,8 +4,13 @@ Um aplicação para desktop para monitorar se a cotação de uma ação da B3 es
 
 ## Dependências
 
+- .NET 8
 - EF Core - Migrations
 - Docker & [Testcontainers.MsSql](https://dotnet.testcontainers.org/modules/mssql/)
+
+## O Projeto
+
+![logo](./img/stockquote-diagram.png)
 
 ## Configurações
 
