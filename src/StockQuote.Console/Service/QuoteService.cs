@@ -18,6 +18,7 @@ public partial class QuoteService(IServiceScopeFactory _serviceScopeFactory,
     ILogger<QuoteService> _logger) : BackgroundService
 {
     private readonly string[] _commandLineArgs = Environment.GetCommandLineArgs();
+    private readonly string _requestTime = _config["APIQuote:DefaultRequestTime"] ?? "60000";
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -50,7 +51,7 @@ public partial class QuoteService(IServiceScopeFactory _serviceScopeFactory,
             currentPrice = await _apiQuote.GetCurrentQuote(ticker);
             await AlertQuotePrice(quote.Id, currentPrice.Value);
 
-            await Task.Delay(60000, stoppingToken);
+            await Task.Delay(int.Parse(_requestTime), stoppingToken);
         }
 
         _logger.LogInformation("Serviço de Cotação - Finalizado.");
