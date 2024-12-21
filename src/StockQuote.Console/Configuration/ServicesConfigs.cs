@@ -19,7 +19,7 @@ public static class ServicesConfigs
         }
         else
         {
-            services.AddScoped<IEmailSender, FakeEmailSender>();
+            services.AddScoped<IEmailSender, EmailSender>();
             services.AddHttpClient<IApiQuote, ApiQuoteService>();
         }
 

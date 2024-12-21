@@ -16,7 +16,7 @@ public class EmailSender(IConfiguration _config) : IEmailSender
 
     public async Task SendEmailAsync(string subject, string body)
     {
-        if (int.TryParse(_smtpPort, out int port))
+        if (!int.TryParse(_smtpPort, out int port))
         {
             return;
         }

@@ -4,7 +4,7 @@ using StockQuote.UseCases.Quotes.List;
 
 namespace StockQuote.Console.Command;
 
-public class CommandRequest(IMediator _mediator, ILogger<CommandRequest> _logger)
+public class CommandRequest(IMediator _mediator)
 {
     public async Task ExecuteCommand(string[] args)
     {
