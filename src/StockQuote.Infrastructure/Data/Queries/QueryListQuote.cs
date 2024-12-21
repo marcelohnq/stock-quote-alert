@@ -27,7 +27,7 @@ public class QueryListQuote(QuoteContext _dbContext) : IQueryListQuote
 
     public async Task<IEnumerable<QuoteDto>?> ListQuoteAsync(CancellationToken cancellationToken = default)
     {
-        var list = await _dbContext.Database.SqlQuery<QuoteDto>($"{SqlConsult}")
+        var list = await _dbContext.Database.SqlQueryRaw<QuoteDto>(SqlConsult)
             .ToListAsync(cancellationToken);
 
         return list;

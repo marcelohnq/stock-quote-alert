@@ -1,7 +1,6 @@
 ﻿using StockQuote.UseCases.Quotes.Alert;
 using StockQuote.UseCases.Quotes.Create;
 using StockQuote.UseCases.Quotes.List;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace StockQuote.FunctionalTests.Quote;
 
@@ -42,8 +41,8 @@ public class ListQuoteTest(ApplicationFixture _app) : IClassFixture<ApplicationF
     [Fact]
     public async Task Query_LastPrice()
     {
-        var result1 = await _app.Mediator.Send(new CreateQuoteCommand("PETR4", 38.22M, 38.11M));
-        var result2 = await _app.Mediator.Send(new CreateQuoteCommand("ITUB4", 31.12M, 31.07M));
+        var result1 = await _app.Mediator.Send(new CreateQuoteCommand("NIKE34", 38.22M, 38.11M));
+        var result2 = await _app.Mediator.Send(new CreateQuoteCommand("ITUB3", 31.12M, 31.07M));
 
         Assert.NotNull(result1);
         Assert.NotNull(result2);
