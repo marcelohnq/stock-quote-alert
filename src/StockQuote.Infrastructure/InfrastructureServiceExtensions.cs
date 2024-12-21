@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using StockQuote.Core.Interfaces;
 using StockQuote.Infrastructure.Data;
+using StockQuote.Infrastructure.Data.Queries;
+using StockQuote.UseCases.Interfaces;
 
 namespace StockQuote.Infrastructure;
 
@@ -22,7 +24,8 @@ public static class InfrastructureServiceExtensions
             options.UseSqlServer(connectionString));
 
         services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>))
-               .AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>));
+            .AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>))
+            .AddScoped<IQueryListQuote, QueryListQuote>();
 
         logger.LogInformation("Infrastructure - serviços registrados com sucesso");
 
